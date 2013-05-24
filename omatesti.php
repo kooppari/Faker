@@ -9,10 +9,11 @@
 
 <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>">
 
-Tietokannan nimi: <input type="text" name="kantanimi" /><br />
-Tietokannan taulun nimi: <input type="text" name="taulunimi" /><br /><br />
+Tiedoston nimi (esim. testi.sql): <br /><input type="text" name="tiedostonimi" /><br />
+Tietokannan nimi: <br /><input type="text" name="kantanimi" /><br />
+Tietokannan taulun nimi: <br /><input type="text" name="taulunimi" /><br /><br />
 
-Nimien m‰‰r‰: <input type="text" name="maara" />
+Nimien m‰‰r‰: <br /><input type="text" name="maara" /><br />
 <input type="submit" value="Lataa" name="nappi" /><br /><br />
 
 </form>
@@ -28,8 +29,11 @@ Nimien m‰‰r‰: <input type="text" name="maara" />
 		$kantanimi = $_REQUEST['kantanimi'];
 		$taulunimi = $_REQUEST['taulunimi'];
 		$maara = $_REQUEST['maara'];
+		//$tiedostonimi = $_REQUEST['tiedostonimi'];
 		
-		$file = "fakertesti.sql";
+		//$ext = substr($tiedostonimi, strpos($tiedostonimi,'.')+1);
+		
+		$file = $_REQUEST['tiedostonimi'];
 		
 		$current = file_get_contents($file);
 		
@@ -39,14 +43,6 @@ Nimien m‰‰r‰: <input type="text" name="maara" />
 		file_put_contents($file, $current);
 		$current .= "\n";
 		file_put_contents($file, $current);
-		$current .= "/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;\n";
-		file_put_contents($file, $current);
-		$current .= "/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;\n";
-		file_put_contents($file, $current);
-		$current .= "/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;\n";
-		file_put_contents($file, $current);
-		$current .= "/*!40101 SET NAMES utf8 */;\n\n";
-		file_put_contents($file, $current);
 		
 		$current .= "CREATE TABLE IF NOT EXISTS `" . $taulunimi . "` (\n";
 		file_put_contents($file, $current);
@@ -54,7 +50,7 @@ Nimien m‰‰r‰: <input type="text" name="maara" />
 		file_put_contents($file, $current);
 		$current .= "`nimi` text COLLATE utf8_swedish_ci NOT NULL,\n";
 		file_put_contents($file, $current);
-		/* $current .= "`osoite` text COLLATE utf8_swedish_ci NOT NULL,\n";
+		 /*$current .= "`osoite` text COLLATE utf8_swedish_ci NOT NULL,\n";
 		file_put_contents($file, $current);
 		$current .= "`kaupunki` text COLLATE utf8_swedish_ci NOT NULL,\n";
 		file_put_contents($file, $current);
@@ -77,7 +73,7 @@ Nimien m‰‰r‰: <input type="text" name="maara" />
 		
 		// generate data by accessing properties
 		
-		/* $current .= "INSERT INTO `" . $taulunimi . "` (`nimi`, `osoite`, `kaupunki`, `postinum`, `puhelin`, `syntpaiva`, syntkuukausi`, `syntkuukausi`, `syntvuosi`, `kieli`) VALUES\n" */
+		//$current .= "INSERT INTO `" . $taulunimi . "` (`nimi`, `osoite`, `kaupunki`, `postinum`, `puhelin`, `syntpaiva`, syntkuukausi`, `syntkuukausi`, `syntvuosi`, `kieli`) VALUES\n" */
 		
 		$current .= "INSERT INTO `" . $taulunimi . "` (`nimi`) VALUES\n";
 		file_put_contents($file, $current);
@@ -93,13 +89,30 @@ Nimien m‰‰r‰: <input type="text" name="maara" />
 		$current .= ";";
 		file_put_contents($file, $current);
 		
-		$file = file_get_contents('fakertesti.sql');
+		//var_dump($current);
+		
+		/*$file2 = file_get_contents($current);
 		header("Content-Description: File Transfer");
 		header('Content-Type: application/x-sql');
-		header('Content-Disposition: attachment; filename="fakertesti.sql"');
-		header('Content-Length: ' . strlen($file));
-		echo $file;
+		header('Content-Disposition: attachment; filename="' . $tiedostonimi .'"');
+		header('Content-Length: "'. filesize($file) .'"');
+		echo $file;*/
 		
+		//var_dump($current);
+		
+		header('location: /Faker/download.php?file="' . $file .'"');
+		
+		/*$file_out = $current;
+
+		$out = strlen($file_out);
+		if (isset($file_out)) {
+			header("Content-Length: $out");
+			header("Content-type: application/x-sql");
+			header("Content-Disposition: attachment; filename=$filename");
+			echo $file_out;
+			exit;
+		}*/
+
 	}
 	
 ?>
