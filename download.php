@@ -16,6 +16,7 @@
 			header('Content-type: application/x-sql');
 			header('Content-Disposition: attachment; filename="' . $file .'"');
 			readfile($file);
+			unlink($file);
 			exit;
 		}
 	}
